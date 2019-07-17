@@ -1,5 +1,4 @@
 import router from './router'
-import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
@@ -21,20 +20,7 @@ router.beforeEach(async(to, from, next) => {
 
   if (hasToken) {
     console.log('-----------有token------------' + to.path)
-    if (to.path === '/login') {
-      console.log('-----------如果已登录，则重定向到主页------------')
-      next({ path: '/' })
-      NProgress.done()
-    } else {
-      const hasGetUserInfo = store.getters.name
-      console.log('-----------hasGetUserInfo------------' + hasGetUserInfo)
-      if (hasGetUserInfo) {
-        next()
-      } else {
-        next(`/login?redirect=${to.path}`)
-        NProgress.done()
-      }
-    }
+    next()
   } else {
     /* has no token*/
     console.log('-----------无token------------')

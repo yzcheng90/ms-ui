@@ -19,9 +19,12 @@ service.defaults.validateStatus = function(status) {
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
-    if (store.getters.access_token) {
-      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    let token = getToken()
+    console.log('---------请求前---------------')
+    console.log(token)
+    console.log('---------请求前---------------')
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
     }
     return config
   },
@@ -61,9 +64,9 @@ service.interceptors.response.use(
       // 未认证
       if (response.status === 401) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        MessageBox.confirm('您的登录已经失效，是否重新登录', '系统提示', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -71,7 +74,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.message || response.message))
     } else {
       return res
     }
