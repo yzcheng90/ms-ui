@@ -8,54 +8,45 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="ID"  width="110">
+      <el-table-column label="客户端ID"  width="110">
         <template slot-scope="scope">
-          {{ scope.row.userId }}
+          {{ scope.row.clientId }}
         </template>
       </el-table-column>
-      <el-table-column label="用户名" width="110" align="center">
+      <el-table-column label="客户端密钥" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
+          <span>{{ scope.row.clientSecret }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话" width="200" align="center">
+      <el-table-column label="资源ID" width="200" align="center">
         <template slot-scope="scope">
-          {{ scope.row.phone }}
+          {{ scope.row.resourceIds }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="限流等级" width="110" align="center">
+      <el-table-column class-name="status-col" label="权限范围" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.limitLevel | statusFilter">{{ scope.row.limitLevel }}</el-tag>
+          {{ scope.row.scope }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column  label="认证模式" class-name="small-padding fixed-width" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.lockFlag | statusFilter">{{ scope.row.lockFlag }}</el-tag>
+          {{ scope.row.authorizedGrantTypes }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+      <el-table-column align="center" prop="created_at" label="回调URL" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.webServerRedirectUri }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="更新时间" width="200">
+      <el-table-column align="center" prop="created_at" label="自定义参数" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.updateTime }}</span>
+          <span>{{ scope.row.additionalInformation }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
-          </el-button>
-          <el-button size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            配置限流等级
-          </el-button>
-          <el-button size="mini" @click="handleModifyStatus(row,'draft')">
-            锁定
-          </el-button>
-          <el-button size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
-            删除
           </el-button>
         </template>
       </el-table-column>
@@ -65,7 +56,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/userList'
+import { getClientList } from '@/api/client'
 
 export default {
   filters: {
@@ -85,7 +76,7 @@ export default {
       total: 0,
       listQuery: {
         current: 1,
-        limit: 20,
+        size: 20,
         importance: undefined,
         title: undefined,
         type: undefined,
@@ -99,7 +90,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getUserList(this.listQuery).then(response => {
+      getClientList(this.listQuery).then(response => {
         this.list = response.data.records
         this.total = response.data.total
         this.listLoading = false

@@ -69,15 +69,15 @@ export const constantRoutes = [
         meta: { title: '用户管理', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        path: 'client',
+        name: 'client',
+        component: () => import('@/views/client/index'),
         meta: { title: '客户端管理', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        path: 'token',
+        name: 'token',
+        component: () => import('@/views/token/index'),
         meta: { title: 'Token管理', icon: 'tree' }
       }
     ]
