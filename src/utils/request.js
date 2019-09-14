@@ -75,6 +75,13 @@ service.interceptors.response.use(
         })
       }
       return Promise.reject(new Error(res.message || response.message))
+    } else if (res.code !== 200) {
+      Message({
+        message: res.message || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(new Error(res.message || response.message))
     } else {
       return res
     }
